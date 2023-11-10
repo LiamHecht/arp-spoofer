@@ -1,6 +1,5 @@
 import socket
 import struct
-from find_mac_addresses import find_mac
 import time
 
 def manipulate_packet(packet):
