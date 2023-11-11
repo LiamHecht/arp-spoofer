@@ -66,6 +66,6 @@ def search_arp_cache(target_ip):
     return None
 
 def record_packet(raw_data, filename):
-    with open(filename, 'w') as file:
+    with open(f"packets/{filename}", 'w') as file:
         file.write(str(raw_data))
         file.write("\n----------------------------------------------------------------------------------------\n")
