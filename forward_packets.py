@@ -4,8 +4,6 @@ import time
 
 def manipulate_packet(packet):
     from sniffer import ethernet_head, ipv4_head, get_ip
-    # packet = b"\x08\x00'\xd9\xb3\xb1\xd8^\xd3\x93\xbb\xf8\x08\x00E\x00\x00<Q\xe7\x00\x00\x80\x01\xd4\xbe\n\x00\x00\x01\n\x00\x00\x1b\x08\x00MY\x00\x01\x00\x02abcdefghijklmnopqrstuvwabcdefghi"
-    # print(packet)
     print(packet)
     eth = ethernet_head(packet)
     dest_mac, source_mac, proto, data = ethernet_head(packet)
@@ -71,11 +69,3 @@ def record_packet(raw_data, filename):
     with open(filename, 'w') as file:
         file.write(str(raw_data))
         file.write("\n----------------------------------------------------------------------------------------\n")
-# packet = b"\x08\x00'\xd9\xb3\xb1\xd8^\xd3\x93\xbb\xf8\x08\x00E\x00\x00<Q\xe7\x00\x00\x80\x01\xd4\xbe\n\x00\x00\x01\n\x00\x00\x1b\x08\x00MY\x00\x01\x00\x02abcdefghijklmnopqrstuvwabcdefghi"
-# packet = b"\x08\x00'\xd9\xb3\xb1\xd8^\xd3\x93\xbb\xf8\x08\x00E\x00\x00<\xb0\xf7\x00\x00\x80\x01u\xae\n\x00\x00\x01\n\x00\x00\x1b\x08\x00MM\x00\x01\x00\x0eabcdefghijklmnopqrstuvwabcdefghi"
-# new_p = manipulate_packet(packet)
-# print(packet)
-# print("----------------------------------------")
-# print(new_p)
-
-# forward_packet(packet, "enp0s3")
