@@ -58,7 +58,7 @@ def get_ip(addr):
 def tcp_head(raw_data):
     src_port, dest_port, sequence, acknowledgment, offset_reserved_flags = struct.unpack('! H H L L H', raw_data[:14])
     offset = (offset_reserved_flags >> 12) * 4
-    flags = offset_reserved_flags & 0b00111111  # Corrected flags extraction
+    flags = offset_reserved_flags & 0b00111111
     flag_urg = (flags & 0b100000) >> 5
     flag_ack = (flags & 0b010000) >> 4
     flag_psh = (flags & 0b001000) >> 3
