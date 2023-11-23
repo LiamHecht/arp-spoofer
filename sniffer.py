@@ -3,38 +3,52 @@ import struct
 import socket
 
 def get_mac_addr(bytes_addr):
+    # Convert the bytes of MAC address to a string representation
     bytes_str = map('{:02x}'.format, bytes_addr)
+    #create the MAC address with colons
     mac_addr = ':'.join(bytes_str)
     return mac_addr
 
 def ethernet_head(raw_data):
+    # Unpack Ethernet header
     dest, src, prototype = struct.unpack('! 6s 6s H', raw_data[:14])
+    # Convert destination and source MAC addresses to readable format
     dest_mac = get_mac_addr(dest)
     src_mac = get_mac_addr(src)
+    # Convert the prototype field to a human-readable format
     proto = socket.htons(prototype)
+    # Extract data after the Ethernet header
     data = raw_data[14:]
     return dest_mac, src_mac, proto, data
 
 def icmp_head(raw_data):
+    # Unpack ICMP header
     icmp_type, icmp_code, checksum = struct.unpack('! B B H', raw_data[:4])
+    # Extract data after the ICMP header
     data = raw_data[4:]
     return icmp_type, icmp_code, checksum, data
 
 def udp_head(raw_data):
+    # Unpack UDP header 
     src_port, dest_port, length, checksum = struct.unpack('! H H H H', raw_data[:8])
+    # Extract data after the UDP header
     data = raw_data[8:]
     return src_port, dest_port, length, checksum, data
 
 def ipv4_head(raw_data):
+    # Unpack IPv4 header 
     version_header_length = raw_data[0]
     version = version_header_length >> 4
     header_length = (version_header_length & 15) * 4
     ttl, proto, src, target = struct.unpack('! 8x B B 2x 4s 4s', raw_data[:20])
+    # Extract data after the IPv4 header
     data = raw_data[header_length:]
     return version, header_length, ttl, proto, src, target, data
 
 def dns_head(raw_data):
+    # Unpack DNS header
     transaction_id, flags, questions, answers, authority, additional = struct.unpack('! H H H H H H', raw_data[:12])
+    # Extract data after the DNS header
     data = raw_data[12:]
     return transaction_id, flags, questions, answers, authority, additional, data
 
@@ -85,16 +99,12 @@ def sniff_packets(interface, target1_ip, target2_ip):
     while True:
         raw_data, addr = s.recvfrom(65535)
         eth = ethernet_head(raw_data)
-        # print('\nEthernet Frame:')
-        # print('Destination: {}, Source: {}, Protocol: {}'.format(eth[0], eth[1], eth[2]))
+
         if eth[2] == 8:  # IPv4
             ipv4 = ipv4_head(eth[3])
             source = get_ip(ipv4[4])
             target = get_ip(ipv4[5])
 
-            # print('\t - IPv4 Packet:')
-            # print('\t\t - Version: {}, Header Length: {}, TTL: {}'.format(ipv4[0], ipv4[1], ipv4[2]))
-            # print('\t\t - Protocol: {}, Source: {}, Target: {}'.format(ipv4[3], source, target))
 
             if (source == target1_ip and target == target2_ip) or (source == target2_ip and target == target1_ip):
                 print(raw_data)

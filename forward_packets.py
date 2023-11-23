@@ -12,10 +12,8 @@ def manipulate_packet(packet):
     target = get_ip(ipv4[5])
 
 
-    # print("----------------------------")
     print(target)
     new_dest_mac = search_arp_cache(target)
-    # new_source_mac = "d8:5e:d3:93:bb:f8"
     dest_mac = bytes.fromhex(new_dest_mac.replace(":", "")) 
     new_source_mac = bytes.fromhex(source_mac.replace(":", "")) 
 
@@ -40,11 +38,10 @@ def forward_packet(packet, interface):
     if manipulated_packet is not None:
         # Open a raw socket for sending packets
         with socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(3)) as s:
-            # Replace 'eth0' with your network interface name
             s.bind((interface, 0))
             s.send(manipulated_packet)
     
-    # Generate a unique filename based on a timestamp or any other identifier
+    # Generate a unique filename based on a timestamp 
     filename = f"packet_{int(time.time())}.txt"
     record_packet(manipulated_packet, filename)
     print("Packet sent")
@@ -57,7 +54,6 @@ def search_arp_cache(target_ip):
                 if len(parts) == 6:
                     ip, _, _, mac, _, _ = parts
                     if ip == target_ip:
-                        # Make sure the MAC address is in the correct format (00:11:22:33:44:55)
                         return mac
     except FileNotFoundError:
         print("ARP cache file not found. Make sure you are running this on a Linux system.")
@@ -68,4 +64,3 @@ def search_arp_cache(target_ip):
 def record_packet(raw_data, filename):
     with open(f"packets/{filename}", 'w') as file:
         file.write(str(raw_data))
-        file.write("\n----------------------------------------------------------------------------------------\n")
