@@ -11,6 +11,3 @@ def find_mac(ip):
         print(output)
     except subprocess.CalledProcessError as e:
         print(f"Ping failed with error: {e.returncode}")
-# if __name__ == "__main__":
-#     find_mac("10.0.0.1")
-#     find_mac("10.0.0.27")

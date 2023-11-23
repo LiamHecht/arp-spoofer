@@ -11,10 +11,9 @@ def get_network_interface():
         print("Error:", e)
     return None
 
-# Get and print the second interface
 if __name__ == "__main__":
     interface = get_network_interface()
     if interface:
-        print("Second Interface:", interface)
+        print("Interface:", interface)
     else:
-        print("Second interface not found.")
+        print("interface not found.")
