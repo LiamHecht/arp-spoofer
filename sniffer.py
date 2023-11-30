@@ -98,6 +98,7 @@ def sniff_packets(interface, target1_ip, target2_ip):
     s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
     while True:
         raw_data, addr = s.recvfrom(65535)
+        # print(raw_data)
         eth = ethernet_head(raw_data)
 
         if eth[2] == 8:  # IPv4
@@ -107,11 +108,11 @@ def sniff_packets(interface, target1_ip, target2_ip):
 
 
             if (source == target1_ip and target == target2_ip) or (source == target2_ip and target == target1_ip):
-                print(raw_data)
-                print(addr)
+                # print(raw_data)
+                # print(addr)
                 print("This packet should be forwarded.")
                 forward_packet(raw_data, interface)
-        analyze_packet(raw_data, addr)
+        # analyze_packet(raw_data, addr)
 
 def analyze_packet(raw_data, addr):
     eth = ethernet_head(raw_data)
