@@ -59,7 +59,7 @@ To run the ARP spoofing script, you'll need to specify the target IP, the IP you
    Execute the script using the following command:
 
    ```bash
-   python arp_spoof.py -I eth0 -spoofip <spoof_ip> -targetip <target_ip> -mac <your_mac>
+   python arp_spoof.py -I eth0 -spoofip <spoof_ip> -targetip <target_ip> -mac <your_mac> -localip <local_ip>
    ```
 
 
